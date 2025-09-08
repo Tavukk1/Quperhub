@@ -1,53 +1,75 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 
-local Window = Rayfield:CreateWindow({
-    Name = "Quper Hub",
-    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-    LoadingTitle = "Qupe",
-    LoadingSubtitle = "by qp",
-    ShowText = "", -- for mobile users to unhide rayfield, change if you'd like
-    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
- 
-    ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
- 
-    DisableRayfieldPrompts = false,
-    DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
- 
-    ConfigurationSaving = {
-       Enabled = false,
-       FolderName = nil, -- Create a custom folder for your hub/game
-       FileName = "Big Hub"
-    },
- 
-    Discord = {
-       Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-       Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-    },
- 
-    KeySystem = false, -- Set this to true to use our key system
-    KeySettings = {
-       Title = "Untitled",
-       Subtitle = "Key System",
-       Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-       FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-       SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-       Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
-    }
- })
+local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+Library.BackgroundColor = Color3.fromRGB(36, 36, 36);
+Library.AccentColor = Color3.fromRGB(61, 180, 136);
+local Window = Library:CreateWindow({
+    -- Set Center to true if you want the menu to appear in the center
+    -- Set AutoShow to true if you want the menu to appear when it is created
+    -- Position and Size are also valid options here
+    -- but you do not need to define them unless you are changing them :)
 
+    Title = 'Locer Hub',
+    Center = true,
+    AutoShow = true,
+    TabPadding = 8,
+    MenuFadeTime = 0.2
+})
 
- local Tab = Window:CreateTab("Main", 0) -- Title, Image
- local Section = Tab:CreateSection("Dupe")
- local Button = Tab:CreateButton({
-    Name = "Bank Rollback",
-    Callback = function()
+local Tabs = {
+    -- Creates a new tab titled Main
+    Main = Window:AddTab('Main'),
+}
+local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Reroll Rollback')
+LeftGroupBox:AddDivider()
+LeftGroupBox:AddDropdown('Select Type', {
+    Values = { 'Weapon Reroll', 'Clan Reroll', 'Element Reroll' },
+    Default = 1, -- number index of the value / string
+    Multi = false, -- true / false, allows multiple choices to be selected
+
+    Text = 'Select Type',
+    Tooltip = 'Dupes rrs', -- Information shown when you hover over the dropdown
+
+    Callback = function(Value)
+        print('[cb] Dropdown got changed. New value:', Value)
+    end
+})
+local MyButton = LeftGroupBox:AddButton({
+    Text = 'Dupe',
+    Func = function()
+        print('You clicked a button!')
+    end,
+    DoubleClick = false,
+    Tooltip = ''
+})
+
+local RightGroupbox = Tabs.Main:AddRightGroupbox('Bank Dupe');
+
+RightGroupbox:AddInput('ItemName', {
+    Default = 'Item Name',
+    Numeric = false, -- true / false, only allows numbers
+    Finished = false, -- true / false, only calls callback when you press enter
+
+    Text = '',
+    Tooltip = '', -- Information shown when you hover over the textbox
+
+    Placeholder = '', -- placeholder text when the box is empty
+    -- MaxLength is also an option which is the max length of the text
+
+    Callback = function(Value)
+        print('[cb] Text updated. New text:', Value)
+    end
+})
+
+local MyButton2 = RightGroupbox:AddButton({
+    Text = 'Bank Rollback',
+    Func = function()
         local ts = game:GetService("TeleportService")
         local p = game:GetService("Players").LocalPlayer
         ts:Teleport(game.PlaceId, p)
     end,
- })
-
-
- Rayfield:LoadConfiguration()
+    DoubleClick = false,
+    Tooltip = ''
+})
